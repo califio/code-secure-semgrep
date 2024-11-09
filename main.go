@@ -34,6 +34,7 @@ func main() {
 		ExcludedPaths: getEnv("SEMGREP_EXCLUDED_PATHS", ""),
 		Verbose:       verbose,
 		Output:        getEnv("SEMGREP_OUTPUT", "semgrep.json"),
+		ProjectPath:   getEnv("PROJECT_PATH", ""),
 	})
 	// register handler
 	newAnalyzer.RegisterHandler(handler.GetSASTHandler())

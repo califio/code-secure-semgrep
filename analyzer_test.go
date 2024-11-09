@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnalyzer(t *testing.T) {
+func initEnv() {
 	os.Setenv("GITLAB_TOKEN", "change_me")
 	os.Setenv("CI_SERVER_URL", "https://gitlab.com")
 	//os.Setenv("CI_MERGE_REQUEST_IID", "18")
@@ -26,6 +26,9 @@ func TestAnalyzer(t *testing.T) {
 	os.Setenv("CI_COMMIT_SHA", "891832b2fdecb72c444af1a6676eba6eb40435ab")
 	os.Setenv("CODE_SECURE_TOKEN", "4dde5ecdabc442a993d994c37cd3fd28d72ed58edbfd4c4180fa5f7acbbbda4c")
 	os.Setenv("CODE_SECURE_SERVER", "http://localhost:5272")
+}
+func TestAnalyzer(t *testing.T) {
+	initEnv()
 	data, err := os.ReadFile("testdata/semgrep.json")
 	if err != nil {
 		logger.Error(err.Error())
@@ -44,4 +47,24 @@ func TestAnalyzer(t *testing.T) {
 	analyzer.RegisterSourceManager(gitlab)
 	analyzer.InitScan("semgrep")
 	analyzer.HandleFindings(findings)
+}
+
+func TestScanAnalyzer(t *testing.T) {
+	initEnv()
+	os.Setenv("PROJECT_PATH", "../../vulnado")
+	newAnalyzer := analyzer.NewAnalyzer[finding.SASTFinding]()
+	// register semgrep
+	newAnalyzer.RegisterScanner(&semgrep.Scanner{
+		Configs:       getEnv("SEMGREP_RULES", ""),
+		Severities:    getEnv("SEMGREP_SEVERITY", ""),
+		ProEngine:     true,
+		ExcludedPaths: getEnv("SEMGREP_EXCLUDED_PATHS", ""),
+		Verbose:       false,
+		Output:        getEnv("SEMGREP_OUTPUT", "semgrep.json"),
+		ProjectPath:   getEnv("PROJECT_PATH", "."),
+	})
+	// register handler
+	newAnalyzer.RegisterHandler(handler.GetSASTHandler())
+	// run
+	newAnalyzer.Run()
 }
