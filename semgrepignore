@@ -28,4 +28,3 @@ vendor/
 
 # Semgrep-action log folder
 .semgrep_logs/
-semgrep.json
