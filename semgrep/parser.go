@@ -55,32 +55,34 @@ func ConvertReportToSASTFindings(report Report) []finding.SASTFinding {
 				}
 			}
 		}
-		//cwe
-		if len(result.Extra.Metadata.Cwe) > 0 {
-			description += "\n\n___\n**CWE**\n"
-			for _, cwe := range result.Extra.Metadata.Cwe {
-				description += fmt.Sprintf("- %s\n", cwe)
+		/*
+			//cwe
+			if len(result.Extra.Metadata.Cwe) > 0 {
+				description += "\n\n___\n**CWE**\n"
+				for _, cwe := range result.Extra.Metadata.Cwe {
+					description += fmt.Sprintf("- %s\n", cwe)
+				}
 			}
-		}
-		//owasp
-		if len(result.Extra.Metadata.Owasp) > 0 {
-			description += "\n\n___\n**OWASP**\n"
-			for _, s := range result.Extra.Metadata.Owasp {
-				description += fmt.Sprintf("- %s\n", s)
+			//owasp
+			if len(result.Extra.Metadata.Owasp) > 0 {
+				description += "\n\n___\n**OWASP**\n"
+				for _, s := range result.Extra.Metadata.Owasp {
+					description += fmt.Sprintf("- %s\n", s)
+				}
 			}
-		}
-		//reference
-		if len(result.Extra.Metadata.References) > 0 {
-			description += "\n\n___\n**References**\n"
-			for _, s := range result.Extra.Metadata.References {
-				description += fmt.Sprintf("- %s\n", s)
+			//reference
+			if len(result.Extra.Metadata.References) > 0 {
+				description += "\n\n___\n**References**\n"
+				for _, s := range result.Extra.Metadata.References {
+					description += fmt.Sprintf("- %s\n", s)
+				}
 			}
-		}
-		//source
-		if result.Extra.Metadata.Source != "" {
-			description += "\n\n___\n**Source**\n"
-			description += fmt.Sprintf("- %s\n", result.Extra.Metadata.Source)
-		}
+			//source
+			if result.Extra.Metadata.Source != "" {
+				description += "\n\n___\n**Source**\n"
+				description += fmt.Sprintf("- %s\n", result.Extra.Metadata.Source)
+			}
+		*/
 		issue := finding.SASTFinding{
 			RuleID:         result.CheckId,
 			Identity:       result.Extra.Fingerprint,

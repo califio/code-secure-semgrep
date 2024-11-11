@@ -27,6 +27,7 @@ func initEnv() {
 	os.Setenv("CODE_SECURE_TOKEN", "4dde5ecdabc442a993d994c37cd3fd28d72ed58edbfd4c4180fa5f7acbbbda4c")
 	os.Setenv("CODE_SECURE_SERVER", "http://localhost:5272")
 }
+
 func TestAnalyzer(t *testing.T) {
 	initEnv()
 	data, err := os.ReadFile("testdata/semgrep.json")
