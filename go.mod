@@ -2,7 +2,7 @@ module semgrep
 
 go 1.22
 
-require gitlab.com/code-secure/analyzer v1.0.3
+require gitlab.com/code-secure/analyzer v1.0.4
 
 require (
 	github.com/fatih/color v1.16.0 // indirect

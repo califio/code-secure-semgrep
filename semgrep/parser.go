@@ -78,11 +78,11 @@ func ConvertReportToSASTFindings(report Report) []finding.SASTFinding {
 				}
 			}
 			//source
-			if result.Extra.Metadata.Source != "" {
-				description += "\n\n___\n**Source**\n"
-				description += fmt.Sprintf("- %s\n", result.Extra.Metadata.Source)
-			}
 		*/
+		if result.Extra.Metadata.Source != "" {
+			description += "\n\n___\n**References**\n"
+			description += fmt.Sprintf("- %s\n", result.Extra.Metadata.Source)
+		}
 		issue := finding.SASTFinding{
 			RuleID:         result.CheckId,
 			Identity:       result.Extra.Fingerprint,
