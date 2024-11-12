@@ -23,7 +23,6 @@ type Metadata struct {
 	Confidence         string   `json:"confidence"`
 	Cwe                []string `json:"cwe"`
 	Impact             string   `json:"impact"`
-	Owasp              []string `json:"owasp"`
 	References         []string `json:"references"`
 	Source             string   `json:"source"`
 	VulnerabilityClass []string `json:"vulnerability_class"`
