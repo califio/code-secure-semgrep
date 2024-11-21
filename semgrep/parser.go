@@ -3,22 +3,23 @@ package semgrep
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.com/code-secure/analyzer/finding"
+	"gitlab.com/code-secure/analyzer"
 	"reflect"
 	"strings"
 )
 
-func ParseJsonToSASTFindings(data []byte) ([]finding.SASTFinding, error) {
+func ParseJsonToSASTResult(data []byte) (*analyzer.SASTResult, error) {
 	var report Report
 	err := json.Unmarshal(data, &report)
 	if err != nil {
 		return nil, err
 	}
-	return ConvertReportToSASTFindings(report), err
+	result := ConvertReportToSASTResult(report)
+	return &result, nil
 }
 
-func ConvertReportToSASTFindings(report Report) []finding.SASTFinding {
-	var findings []finding.SASTFinding
+func ConvertReportToSASTResult(report Report) analyzer.SASTResult {
+	var findings []analyzer.Finding
 	for _, result := range report.Results {
 		name := fmt.Sprintf("%s at %s:%d", slugToNormalText(result.CheckId), result.Path, result.Start.Line)
 		category := "Other"
@@ -27,7 +28,7 @@ func ConvertReportToSASTFindings(report Report) []finding.SASTFinding {
 		}
 		description := result.Extra.Message
 		//dataflow
-		var findingFlows []finding.Location
+		var findingFlows []analyzer.FindingLocation
 		if result.Extra.Dataflow != nil {
 			var taintFlows []*TaintLocation
 			taintSource := ConvertCliLoc(result.Extra.Dataflow.TaintSource)
@@ -44,46 +45,23 @@ func ConvertReportToSASTFindings(report Report) []finding.SASTFinding {
 			taintFlows = append(taintFlows, taintSinks...)
 			if len(taintFlows) > 0 {
 				for _, taint := range taintFlows {
-					findingFlows = append(findingFlows, finding.Location{
+					findingFlows = append(findingFlows, analyzer.FindingLocation{
 						Path:        taint.Location.Path,
 						Snippet:     taint.Content,
-						StartLine:   taint.Location.Start.Line,
-						EndLine:     taint.Location.End.Line,
-						StartColumn: taint.Location.Start.Col,
-						EndColumn:   taint.Location.End.Col,
+						StartLine:   analyzer.Ptr(taint.Location.Start.Line),
+						EndLine:     analyzer.Ptr(taint.Location.End.Line),
+						StartColumn: analyzer.Ptr(taint.Location.Start.Col),
+						EndColumn:   analyzer.Ptr(taint.Location.End.Col),
 					})
 				}
 			}
 		}
-		/*
-			//cwe
-			if len(result.Extra.Metadata.Cwe) > 0 {
-				description += "\n\n___\n**CWE**\n"
-				for _, cwe := range result.Extra.Metadata.Cwe {
-					description += fmt.Sprintf("- %s\n", cwe)
-				}
-			}
-			//owasp
-			if len(result.Extra.Metadata.Owasp) > 0 {
-				description += "\n\n___\n**OWASP**\n"
-				for _, s := range result.Extra.Metadata.Owasp {
-					description += fmt.Sprintf("- %s\n", s)
-				}
-			}
-			//reference
-			if len(result.Extra.Metadata.References) > 0 {
-				description += "\n\n___\n**References**\n"
-				for _, s := range result.Extra.Metadata.References {
-					description += fmt.Sprintf("- %s\n", s)
-				}
-			}
-			//source
-		*/
+		var references []string
 		if result.Extra.Metadata.Source != "" {
-			description += "\n\n___\n**References**\n"
-			description += fmt.Sprintf("- %s\n", result.Extra.Metadata.Source)
+			references = append(references, result.Extra.Metadata.Source)
 		}
-		issue := finding.SASTFinding{
+
+		issue := analyzer.Finding{
 			RuleID:         result.CheckId,
 			Identity:       result.Extra.Fingerprint,
 			Name:           name,
@@ -91,19 +69,22 @@ func ConvertReportToSASTFindings(report Report) []finding.SASTFinding {
 			Recommendation: "",
 			Category:       category,
 			Severity:       result.Severity(),
-			Location: &finding.Location{
+			Location: &analyzer.FindingLocation{
 				Path:        result.Path,
 				Snippet:     result.Extra.Lines,
-				StartLine:   result.Start.Line,
-				EndLine:     result.End.Line,
-				StartColumn: result.Start.Col,
-				EndColumn:   result.End.Col,
+				StartLine:   analyzer.Ptr(result.Start.Line),
+				EndLine:     analyzer.Ptr(result.End.Line),
+				StartColumn: analyzer.Ptr(result.Start.Col),
+				EndColumn:   analyzer.Ptr(result.End.Col),
 			},
-			FindingFlow: findingFlows,
+			Metadata: &analyzer.FindingMetadata{
+				FindingFlow: findingFlows,
+				References:  references,
+			},
 		}
 		findings = append(findings, issue)
 	}
-	return findings
+	return analyzer.SASTResult{Findings: findings}
 }
 
 func ConvertCliLoc(node []interface{}) *TaintLocation {

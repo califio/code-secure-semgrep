@@ -2,7 +2,7 @@ package semgrep
 
 import (
 	"bufio"
-	"gitlab.com/code-secure/analyzer/finding"
+	"gitlab.com/code-secure/analyzer"
 	"gitlab.com/code-secure/analyzer/logger"
 	"io"
 	"os"
@@ -24,7 +24,7 @@ func (scanner *Scanner) Name() string {
 	return "semgrep"
 }
 
-func (scanner *Scanner) Scan() ([]finding.SASTFinding, error) {
+func (scanner *Scanner) Scan() (*analyzer.SASTResult, error) {
 	args := scanner.args()
 	cmd := exec.Command("semgrep", args...)
 	logger.Info(cmd.String())
@@ -46,7 +46,7 @@ func (scanner *Scanner) Scan() ([]finding.SASTFinding, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ParseJsonToSASTFindings(data)
+	return ParseJsonToSASTResult(data)
 }
 
 func (scanner *Scanner) args() []string {

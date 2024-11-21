@@ -1,9 +1,7 @@
 package main
 
 import (
-	"gitlab.com/code-secure/analyzer/analyzer"
-	"gitlab.com/code-secure/analyzer/finding"
-	"gitlab.com/code-secure/analyzer/handler"
+	"gitlab.com/code-secure/analyzer"
 	"os"
 	"semgrep/semgrep"
 )
@@ -25,9 +23,9 @@ func main() {
 	if getEnv("SEMGREP_DEBUG", "false") == "true" || getEnv("SEMGREP_VERBOSE", "false") == "true" {
 		verbose = true
 	}
-	newAnalyzer := analyzer.NewAnalyzer[finding.SASTFinding]()
-	// register semgrep
-	newAnalyzer.RegisterScanner(&semgrep.Scanner{
+	sastAnalyzer := analyzer.NewSASTAnalyzer()
+	// register scanner
+	sastAnalyzer.RegisterScanner(&semgrep.Scanner{
 		Configs:       getEnv("SEMGREP_RULES", ""),
 		Severities:    getEnv("SEMGREP_SEVERITY", ""),
 		ProEngine:     proEngine,
@@ -36,8 +34,5 @@ func main() {
 		Output:        getEnv("SEMGREP_OUTPUT", "semgrep.json"),
 		ProjectPath:   getEnv("PROJECT_PATH", ""),
 	})
-	// register handler
-	newAnalyzer.RegisterHandler(handler.GetSASTHandler())
-	// run
-	newAnalyzer.Run()
+	sastAnalyzer.Run()
 }

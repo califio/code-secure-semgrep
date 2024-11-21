@@ -1,6 +1,6 @@
 package semgrep
 
-import "gitlab.com/code-secure/analyzer/api"
+import "gitlab.com/code-secure/analyzer"
 
 type Region struct {
 	Col    int `json:"col"`
@@ -21,9 +21,7 @@ type TaintLocation struct {
 
 type Metadata struct {
 	Confidence         string   `json:"confidence"`
-	Cwe                []string `json:"cwe"`
 	Impact             string   `json:"impact"`
-	References         []string `json:"references"`
 	Source             string   `json:"source"`
 	VulnerabilityClass []string `json:"vulnerability_class"`
 }
@@ -50,26 +48,26 @@ func (m *Result) Severity() string {
 	if m.Extra.Metadata.Impact != "" {
 		switch m.Extra.Metadata.Impact {
 		case "HIGH":
-			return api.SeverityHigh
+			return analyzer.SeverityCritical
 		case "MEDIUM":
-			return api.SeverityMedium
+			return analyzer.SeverityMedium
 		case "LOW":
-			return api.SeverityLow
+			return analyzer.SeverityLow
 		default:
-			return api.SeverityInfo
+			return analyzer.SeverityInfo
 		}
 	}
 	if m.Extra.Severity != "" {
 		switch m.Extra.Severity {
 		case "ERROR":
-			return api.SeverityHigh
+			return analyzer.SeverityHigh
 		case "WARNING":
-			return api.SeverityMedium
+			return analyzer.SeverityMedium
 		default:
-			return api.SeverityInfo
+			return analyzer.SeverityInfo
 		}
 	}
-	return api.SeverityInfo
+	return analyzer.SeverityInfo
 }
 
 type Result struct {
