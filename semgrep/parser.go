@@ -8,17 +8,17 @@ import (
 	"strings"
 )
 
-func ParseJsonToSASTResult(data []byte) (*analyzer.SASTResult, error) {
+func ParseJsonToFindingResult(data []byte) (*analyzer.FindingResult, error) {
 	var report Report
 	err := json.Unmarshal(data, &report)
 	if err != nil {
 		return nil, err
 	}
-	result := ConvertReportToSASTResult(report)
+	result := ConvertReportToFindingResult(report)
 	return &result, nil
 }
 
-func ConvertReportToSASTResult(report Report) analyzer.SASTResult {
+func ConvertReportToFindingResult(report Report) analyzer.FindingResult {
 	var findings []analyzer.Finding
 	for _, result := range report.Results {
 		name := fmt.Sprintf("%s at %s:%d", slugToNormalText(result.CheckId), result.Path, result.Start.Line)
@@ -84,7 +84,7 @@ func ConvertReportToSASTResult(report Report) analyzer.SASTResult {
 		}
 		findings = append(findings, issue)
 	}
-	return analyzer.SASTResult{Findings: findings}
+	return analyzer.FindingResult{Findings: findings}
 }
 
 func ConvertCliLoc(node []interface{}) *TaintLocation {

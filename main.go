@@ -1,38 +1,43 @@
 package main
 
 import (
+	"github.com/alecthomas/kong"
 	"gitlab.com/code-secure/analyzer"
-	"os"
 	"semgrep/semgrep"
 )
 
-func getEnv(key, defaultValue string) string {
-	value := os.Getenv(key)
-	if len(value) == 0 {
-		return defaultValue
-	}
-	return value
+type RunCmd struct {
+	SemgrepRules         string `help:"Semgrep rules" env:"SEMGREP_RULES" default:""`
+	SemgrepSeverity      string `help:"Semgrep Severity" env:"SEMGREP_SEVERITY" default:""`
+	SemgrepExcludedPaths string `help:"Semgrep Severity" env:"SEMGREP_EXCLUDED_PATHS" default:""`
+	Pro                  bool   `help:"Scan with pro engine" env:"SEMGREP_PRO" default:"true"`
+	Verbose              bool   `help:"Verbose" env:"SEMGREP_VERBOSE" default:"false"`
+	Output               string `help:"Output result" env:"SEMGREP_OUTPUT" default:"semgrep.json"`
+	ProjectPath          string `help:"Project path" env:"PROJECT_PATH" default:""`
+}
+
+func (r *RunCmd) Run() error {
+	sastAnalyzer := analyzer.NewFindingAnalyzer()
+	// register scanner
+	sastAnalyzer.RegisterScanner(&semgrep.Scanner{
+		Configs:       r.SemgrepRules,
+		Severities:    r.SemgrepSeverity,
+		ProEngine:     r.Pro,
+		ExcludedPaths: r.SemgrepExcludedPaths,
+		Verbose:       r.Verbose,
+		Output:        r.Output,
+		ProjectPath:   r.ProjectPath,
+	})
+	sastAnalyzer.Run()
+	return nil
+}
+
+var cli struct {
+	Run RunCmd `cmd:"" help:"Semgrep scan SAST"`
 }
 
 func main() {
-	proEngine := true
-	if getEnv("SEMGREP_PRO", "true") != "true" {
-		proEngine = false
-	}
-	verbose := false
-	if getEnv("SEMGREP_DEBUG", "false") == "true" || getEnv("SEMGREP_VERBOSE", "false") == "true" {
-		verbose = true
-	}
-	sastAnalyzer := analyzer.NewSASTAnalyzer()
-	// register scanner
-	sastAnalyzer.RegisterScanner(&semgrep.Scanner{
-		Configs:       getEnv("SEMGREP_RULES", ""),
-		Severities:    getEnv("SEMGREP_SEVERITY", ""),
-		ProEngine:     proEngine,
-		ExcludedPaths: getEnv("SEMGREP_EXCLUDED_PATHS", ""),
-		Verbose:       verbose,
-		Output:        getEnv("SEMGREP_OUTPUT", "semgrep.json"),
-		ProjectPath:   getEnv("PROJECT_PATH", ""),
-	})
-	sastAnalyzer.Run()
+	ctx := kong.Parse(&cli, kong.Name("analyzer"), kong.UsageOnError())
+	err := ctx.Run()
+	ctx.FatalIfErrorf(err)
 }

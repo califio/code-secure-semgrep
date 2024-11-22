@@ -20,11 +20,15 @@ type Scanner struct {
 	ProjectPath   string
 }
 
+func (scanner *Scanner) Type() analyzer.ScannerType {
+	return analyzer.ScannerTypeSast
+}
+
 func (scanner *Scanner) Name() string {
 	return "semgrep"
 }
 
-func (scanner *Scanner) Scan() (*analyzer.SASTResult, error) {
+func (scanner *Scanner) Scan() (*analyzer.FindingResult, error) {
 	args := scanner.args()
 	cmd := exec.Command("semgrep", args...)
 	logger.Info(cmd.String())
@@ -46,7 +50,7 @@ func (scanner *Scanner) Scan() (*analyzer.SASTResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ParseJsonToSASTResult(data)
+	return ParseJsonToFindingResult(data)
 }
 
 func (scanner *Scanner) args() []string {

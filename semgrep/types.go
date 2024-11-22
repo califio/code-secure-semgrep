@@ -44,7 +44,7 @@ type Extract struct {
 	Dataflow    *DataFlow `json:"dataflow_trace,omitempty"`
 }
 
-func (m *Result) Severity() string {
+func (m *Result) Severity() analyzer.Severity {
 	if m.Extra.Metadata.Impact != "" {
 		switch m.Extra.Metadata.Impact {
 		case "HIGH":

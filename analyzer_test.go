@@ -26,17 +26,16 @@ func initEnv() {
 
 func TestScanAnalyzer(t *testing.T) {
 	initEnv()
-	os.Setenv("PROJECT_PATH", "../../vulnado")
-	newAnalyzer := analyzer.NewSASTAnalyzer()
+	newAnalyzer := analyzer.NewFindingAnalyzer()
 	// register semgrep
 	newAnalyzer.RegisterScanner(&semgrep.Scanner{
-		Configs:       getEnv("SEMGREP_RULES", ""),
-		Severities:    getEnv("SEMGREP_SEVERITY", ""),
+		Configs:       "",
+		Severities:    "",
 		ProEngine:     true,
-		ExcludedPaths: getEnv("SEMGREP_EXCLUDED_PATHS", ""),
+		ExcludedPaths: "",
 		Verbose:       false,
-		Output:        getEnv("SEMGREP_OUTPUT", "semgrep.json"),
-		ProjectPath:   getEnv("PROJECT_PATH", "."),
+		Output:        "semgrep.json",
+		ProjectPath:   "../../vulnado",
 	})
 	// run
 	newAnalyzer.Run()
