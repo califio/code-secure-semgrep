@@ -48,10 +48,10 @@ func ConvertReportToFindingResult(report Report) analyzer.FindingResult {
 					findingFlows = append(findingFlows, analyzer.FindingLocation{
 						Path:        taint.Location.Path,
 						Snippet:     taint.Content,
-						StartLine:   analyzer.Ptr(taint.Location.Start.Line),
-						EndLine:     analyzer.Ptr(taint.Location.End.Line),
-						StartColumn: analyzer.Ptr(taint.Location.Start.Col),
-						EndColumn:   analyzer.Ptr(taint.Location.End.Col),
+						StartLine:   taint.Location.Start.Line,
+						EndLine:     taint.Location.End.Line,
+						StartColumn: taint.Location.Start.Col,
+						EndColumn:   taint.Location.End.Col,
 					})
 				}
 			}
@@ -72,10 +72,10 @@ func ConvertReportToFindingResult(report Report) analyzer.FindingResult {
 			Location: &analyzer.FindingLocation{
 				Path:        result.Path,
 				Snippet:     result.Extra.Lines,
-				StartLine:   analyzer.Ptr(result.Start.Line),
-				EndLine:     analyzer.Ptr(result.End.Line),
-				StartColumn: analyzer.Ptr(result.Start.Col),
-				EndColumn:   analyzer.Ptr(result.End.Col),
+				StartLine:   result.Start.Line,
+				EndLine:     result.End.Line,
+				StartColumn: result.Start.Col,
+				EndColumn:   result.End.Col,
 			},
 			Metadata: &analyzer.FindingMetadata{
 				FindingFlow: findingFlows,

@@ -12,7 +12,7 @@ type RunCmd struct {
 	SemgrepExcludedPaths string `help:"Semgrep Severity" env:"SEMGREP_EXCLUDED_PATHS" default:""`
 	Pro                  bool   `help:"Scan with pro engine" env:"SEMGREP_PRO" default:"true"`
 	Verbose              bool   `help:"Verbose" env:"SEMGREP_VERBOSE" default:"false"`
-	Output               string `help:"Output result" env:"SEMGREP_OUTPUT" default:"semgrep.json"`
+	Output               string `help:"Semgrep output" env:"SEMGREP_OUTPUT" default:"semgrep.json"`
 	ProjectPath          string `help:"Project path" env:"PROJECT_PATH" default:""`
 }
 

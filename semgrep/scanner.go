@@ -17,6 +17,7 @@ type Scanner struct {
 	ExcludedPaths string
 	Verbose       bool
 	Output        string
+	ResultOutput  string
 	ProjectPath   string
 }
 
