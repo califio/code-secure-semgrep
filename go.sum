@@ -47,8 +47,8 @@ github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKs
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/xanzy/go-gitlab v0.112.0 h1:6Z0cqEooCvBMfBIHw+CgO4AKGRV8na/9781xOb0+DKw=
 github.com/xanzy/go-gitlab v0.112.0/go.mod h1:wKNKh3GkYDMOsGmnfuX+ITCmDuSDWFO0G+C4AygL9RY=
-gitlab.com/code-secure/analyzer v1.1.2 h1:EpC5BvrNm0cGUupECgWm5oKh8/me6UL4u5UXKRnxuQk=
-gitlab.com/code-secure/analyzer v1.1.2/go.mod h1:H5lBsxsf87HTu684KkjAeEy3nA1ZT0lzU3KXKgtqHik=
+gitlab.com/code-secure/analyzer v1.1.3 h1:D4IN3GGHZaL0DtuYCm4yJjVGREOldJJFNI+60Y/DE0Y=
+gitlab.com/code-secure/analyzer v1.1.3/go.mod h1:H5lBsxsf87HTu684KkjAeEy3nA1ZT0lzU3KXKgtqHik=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/net v0.0.0-20190603091049-60506f45cf65/go.mod h1:HSz+uSET+XFnRR8LxR5pz3Of3rY3CfYBVs4xY44aLks=
 golang.org/x/net v0.8.0 h1:Zrh2ngAOFYneWTAIAPethzeaQLuHwhuBkuV6ZiRnUaQ=
