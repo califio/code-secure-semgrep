@@ -51,6 +51,10 @@ func (scanner *Scanner) Scan() (*analyzer.FindingResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = os.Remove(scanner.Output)
+	if err != nil {
+		logger.Error("Delete output error: " + err.Error())
+	}
 	return ParseJsonToFindingResult(data)
 }
 

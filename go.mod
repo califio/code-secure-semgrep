@@ -3,8 +3,8 @@ module semgrep
 go 1.22
 
 require (
-	github.com/alecthomas/kong v1.4.0
-	gitlab.com/code-secure/analyzer v1.1.4
+	github.com/alecthomas/kong v1.6.0
+	gitlab.com/code-secure/analyzer v1.1.5
 )
 
 require (
