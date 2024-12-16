@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/alecthomas/kong v1.6.0
-	gitlab.com/code-secure/analyzer v1.1.5
+	gitlab.com/code-secure/analyzer v1.1.6
 )
 
 require (
