@@ -2,8 +2,8 @@ package semgrep
 
 import (
 	"bufio"
-	"gitlab.com/code-secure/analyzer"
-	"gitlab.com/code-secure/analyzer/logger"
+	"github.com/califio/code-secure-analyzer"
+	"github.com/califio/code-secure-analyzer/logger"
 	"io"
 	"os"
 	"os/exec"

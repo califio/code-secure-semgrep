@@ -3,7 +3,7 @@ package semgrep
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.com/code-secure/analyzer"
+	"github.com/califio/code-secure-analyzer"
 	"reflect"
 	"strings"
 )

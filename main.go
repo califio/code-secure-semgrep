@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/alecthomas/kong"
-	"gitlab.com/code-secure/analyzer"
+	"github.com/califio/code-secure-analyzer"
 	"semgrep/semgrep"
 )
 

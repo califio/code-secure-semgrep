@@ -1,6 +1,6 @@
 package semgrep
 
-import "gitlab.com/code-secure/analyzer"
+import "github.com/califio/code-secure-analyzer"
 
 type Region struct {
 	Col    int `json:"col"`
