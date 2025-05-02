@@ -30,7 +30,11 @@ func (scanner *Scanner) Name() string {
 }
 
 func (scanner *Scanner) Scan(option analyzer.ScanOption) (*analyzer.SastResult, error) {
-	args := scanner.args(option.BaseLineCommitSha)
+	baselineCommitHash := ""
+	if option.BaseLineCommitSha != "" && option.ScanStrategy == analyzer.ChangedFileOnly {
+		baselineCommitHash = option.BaseLineCommitSha
+	}
+	args := scanner.args(baselineCommitHash)
 	cmd := exec.Command("semgrep", args...)
 	logger.Info(cmd.String())
 	cmd.Env = os.Environ()
