@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func ParseJsonToFindingResult(data []byte) (*analyzer.FindingResult, error) {
+func ParseJsonToFindingResult(data []byte) (*analyzer.SastResult, error) {
 	var report Report
 	err := json.Unmarshal(data, &report)
 	if err != nil {
@@ -18,8 +18,8 @@ func ParseJsonToFindingResult(data []byte) (*analyzer.FindingResult, error) {
 	return &result, nil
 }
 
-func ConvertReportToFindingResult(report Report) analyzer.FindingResult {
-	var findings []analyzer.Finding
+func ConvertReportToFindingResult(report Report) analyzer.SastResult {
+	var findings []analyzer.SastFinding
 	for _, result := range report.Results {
 		name := fmt.Sprintf("%s at %s:%d", slugToNormalText(result.CheckId), result.Path, result.Start.Line)
 		category := "Other"
@@ -61,7 +61,7 @@ func ConvertReportToFindingResult(report Report) analyzer.FindingResult {
 			references = append(references, result.Extra.Metadata.Source)
 		}
 
-		issue := analyzer.Finding{
+		issue := analyzer.SastFinding{
 			RuleID:         result.CheckId,
 			Identity:       result.Extra.Fingerprint,
 			Name:           name,
@@ -84,7 +84,7 @@ func ConvertReportToFindingResult(report Report) analyzer.FindingResult {
 		}
 		findings = append(findings, issue)
 	}
-	return analyzer.FindingResult{Findings: findings}
+	return analyzer.SastResult{Findings: findings}
 }
 
 func ConvertCliLoc(node []interface{}) *TaintLocation {

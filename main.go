@@ -17,16 +17,17 @@ type RunCmd struct {
 }
 
 func (r *RunCmd) Run() error {
-	sastAnalyzer := analyzer.NewFindingAnalyzer()
-	// register scanner
-	sastAnalyzer.RegisterScanner(&semgrep.Scanner{
-		Configs:       r.SemgrepRules,
-		Severities:    r.SemgrepSeverity,
-		ProEngine:     r.Pro,
-		ExcludedPaths: r.SemgrepExcludedPaths,
-		Verbose:       r.Verbose,
-		Output:        r.Output,
-		ProjectPath:   r.ProjectPath,
+	sastAnalyzer := analyzer.NewSastAnalyzer(analyzer.SastAnalyzerOption{
+		ProjectPath: r.ProjectPath,
+		Scanner: &semgrep.Scanner{
+			Configs:       r.SemgrepRules,
+			Severities:    r.SemgrepSeverity,
+			ProEngine:     r.Pro,
+			ExcludedPaths: r.SemgrepExcludedPaths,
+			Verbose:       r.Verbose,
+			Output:        r.Output,
+			ProjectPath:   r.ProjectPath,
+		},
 	})
 	sastAnalyzer.Run()
 	return nil

@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -29,8 +30,16 @@ func (scanner *Scanner) Name() string {
 	return "semgrep"
 }
 
-func (scanner *Scanner) Scan() (*analyzer.FindingResult, error) {
-	args := scanner.args()
+func (scanner *Scanner) Scan(option analyzer.ScanOption) (*analyzer.SastResult, error) {
+	var changedFiles []string
+	if option.ScanType == analyzer.ChangedFileOnly {
+		for _, file := range option.ChangedFiles {
+			if file.Status == analyzer.Add || file.Status == analyzer.Modify {
+				changedFiles = append(changedFiles, file.To)
+			}
+		}
+	}
+	args := scanner.args(changedFiles)
 	cmd := exec.Command("semgrep", args...)
 	logger.Info(cmd.String())
 	cmd.Env = os.Environ()
@@ -58,7 +67,7 @@ func (scanner *Scanner) Scan() (*analyzer.FindingResult, error) {
 	return ParseJsonToFindingResult(data)
 }
 
-func (scanner *Scanner) args() []string {
+func (scanner *Scanner) args(changedFiles []string) []string {
 	args := []string{
 		"scan",
 		"--no-rewrite-rule-ids",
@@ -95,11 +104,18 @@ func (scanner *Scanner) args() []string {
 	if scanner.Verbose {
 		args = append(args, "--verbose")
 	}
-	if scanner.ProjectPath == "" {
-		scanner.ProjectPath = "."
+	if len(changedFiles) > 0 {
+		for _, file := range changedFiles {
+			args = append(args, filepath.Join(scanner.ProjectPath, file))
+		}
+		return args
+	} else {
+		if scanner.ProjectPath == "" {
+			scanner.ProjectPath = "."
+		}
+		args = append(args, scanner.ProjectPath)
+		return args
 	}
-	args = append(args, scanner.ProjectPath)
-	return args
 }
 
 func printStdout(stdout io.ReadCloser) {
