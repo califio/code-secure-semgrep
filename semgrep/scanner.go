@@ -110,9 +110,6 @@ func (scanner *Scanner) args(changedFiles []string) []string {
 		}
 		return args
 	} else {
-		if scanner.ProjectPath == "" {
-			scanner.ProjectPath = "."
-		}
 		args = append(args, scanner.ProjectPath)
 		return args
 	}

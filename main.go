@@ -13,7 +13,7 @@ type RunCmd struct {
 	Pro                  bool   `help:"Scan with pro engine. Require SEMGREP_APP_TOKEN variable" env:"SEMGREP_PRO" default:"false"`
 	Verbose              bool   `help:"Verbose" env:"SEMGREP_VERBOSE" default:"false"`
 	Output               string `help:"Semgrep output" env:"SEMGREP_OUTPUT" default:"semgrep.json"`
-	ProjectPath          string `help:"Project path" env:"PROJECT_PATH" default:""`
+	ProjectPath          string `help:"Project path" env:"PROJECT_PATH" default:"."`
 }
 
 func (r *RunCmd) Run() error {
