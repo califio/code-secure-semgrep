@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -30,11 +31,15 @@ func (scanner *Scanner) Name() string {
 }
 
 func (scanner *Scanner) Scan(option analyzer.ScanOption) (*analyzer.SastResult, error) {
-	baselineCommitHash := ""
-	if option.BaseLineCommitSha != "" && option.ScanStrategy == analyzer.ChangedFileOnly {
-		baselineCommitHash = option.BaseLineCommitSha
+	var changedFiles []string
+	if option.ScanStrategy == analyzer.ChangedFileOnly && len(option.ChangedFiles) > 0 {
+		for _, file := range option.ChangedFiles {
+			if file.Status != analyzer.Delete && file.To != "" {
+				changedFiles = append(changedFiles, file.To)
+			}
+		}
 	}
-	args := scanner.args(baselineCommitHash)
+	args := scanner.args(changedFiles)
 	cmd := exec.Command("semgrep", args...)
 	logger.Info(cmd.String())
 	cmd.Env = os.Environ()
@@ -62,7 +67,7 @@ func (scanner *Scanner) Scan(option analyzer.ScanOption) (*analyzer.SastResult, 
 	return ParseJsonToFindingResult(data)
 }
 
-func (scanner *Scanner) args(baseLineCommitSha string) []string {
+func (scanner *Scanner) args(changedFiles []string) []string {
 	args := []string{
 		"scan",
 		"--no-rewrite-rule-ids",
@@ -99,10 +104,13 @@ func (scanner *Scanner) args(baseLineCommitSha string) []string {
 	if scanner.Verbose {
 		args = append(args, "--verbose")
 	}
-	if baseLineCommitSha != "" {
-		args = append(args, "--baseline-commit", baseLineCommitSha)
+	if len(changedFiles) > 0 {
+		for _, file := range changedFiles {
+			args = append(args, filepath.Join(scanner.ProjectPath, file))
+		}
+	} else {
+		args = append(args, scanner.ProjectPath)
 	}
-	args = append(args, scanner.ProjectPath)
 	return args
 }
 
