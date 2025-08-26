@@ -29,6 +29,7 @@ func (r *GitHubCmd) Run() error {
 	fmt.Println("BlobURL: " + github.BlobURL())
 	fmt.Println("DefaultBranch: " + github.DefaultBranch())
 	fmt.Println("CommitTitle: " + github.CommitTitle())
+	fmt.Println("CommitBranch: " + github.CommitBranch())
 	fmt.Println("CommitSha: " + github.CommitSha())
 	fmt.Println("MergeRequestID: " + github.MergeRequestID())
 	fmt.Println("MergeRequestTitle: " + github.MergeRequestTitle())
