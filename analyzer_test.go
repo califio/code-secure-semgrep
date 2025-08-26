@@ -1,21 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"github.com/califio/code-secure-analyzer"
-	"github.com/califio/code-secure-analyzer/git"
 	"github.com/joho/godotenv"
 	"os"
 	"semgrep/semgrep"
 	"testing"
 )
-
-func TestGitHubEnv(t *testing.T) {
-	_ = godotenv.Load()
-	g, _ := git.NewGitHub()
-	fmt.Println(g.MergeRequestID())
-	fmt.Println(g.TargetBranchSha())
-}
 
 func TestScanAnalyzer(t *testing.T) {
 	_ = godotenv.Load()
