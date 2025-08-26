@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/alecthomas/kong"
 	"github.com/califio/code-secure-analyzer"
+	"github.com/califio/code-secure-analyzer/git"
 	"semgrep/semgrep"
 )
 
@@ -16,6 +18,27 @@ type RunCmd struct {
 	ProjectPath          string `help:"Project path" env:"PROJECT_PATH" default:"."`
 }
 
+type GitHubCmd struct {
+}
+
+func (r *GitHubCmd) Run() error {
+	github, _ := git.NewGitHub()
+	fmt.Println("ProjectID: " + github.ProjectID())
+	fmt.Println("ProjectName: " + github.ProjectName())
+	fmt.Println("ProjectURL: " + github.ProjectURL())
+	fmt.Println("BlobURL: " + github.BlobURL())
+	fmt.Println("DefaultBranch: " + github.DefaultBranch())
+	fmt.Println("CommitTitle: " + github.CommitTitle())
+	fmt.Println("CommitSha: " + github.CommitSha())
+	fmt.Println("MergeRequestID: " + github.MergeRequestID())
+	fmt.Println("MergeRequestTitle: " + github.MergeRequestTitle())
+	fmt.Println("TargetBranch: " + github.TargetBranch())
+	fmt.Println("SourceBranch: " + github.SourceBranch())
+	fmt.Println("TargetBranchSha: " + github.TargetBranchSha())
+	fmt.Println("CommitTag: " + github.CommitTag())
+	fmt.Println("JobURL: " + github.JobURL())
+	return nil
+}
 func (r *RunCmd) Run() error {
 	sastAnalyzer := analyzer.NewSastAnalyzer(analyzer.SastAnalyzerOption{
 		ProjectPath: r.ProjectPath,
@@ -34,7 +57,8 @@ func (r *RunCmd) Run() error {
 }
 
 var cli struct {
-	Run RunCmd `cmd:"" help:"Semgrep scan SAST"`
+	Run    RunCmd    `cmd:"run" help:"Semgrep scan SAST"`
+	Github GitHubCmd `cmd:"github" help:"Debug github environment variables"`
 }
 
 func main() {

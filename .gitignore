@@ -2,3 +2,4 @@
 semgrep.json
 finding_results.json
 .env
+event.json
