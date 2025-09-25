@@ -25,6 +25,8 @@ github.com/califio/code-secure-analyzer v1.0.4-stag h1:PKiB7K6oDenlamprGbmR9yAEz
 github.com/califio/code-secure-analyzer v1.0.4-stag/go.mod h1:mnAsJwc28FjZXttTEPzlrDTsyxa1qbsdq9GsujvCtLs=
 github.com/califio/code-secure-analyzer v1.0.4 h1:EwVID7rVQ+33mp/IAmpgKtMcVBLM9i9yqp62da+X5cg=
 github.com/califio/code-secure-analyzer v1.0.4/go.mod h1:mnAsJwc28FjZXttTEPzlrDTsyxa1qbsdq9GsujvCtLs=
+github.com/califio/code-secure-analyzer v1.0.5 h1:pw7GsksuqXhgcTQMd317ckVRIIjr4u5kfC9m+l9YaEM=
+github.com/califio/code-secure-analyzer v1.0.5/go.mod h1:mnAsJwc28FjZXttTEPzlrDTsyxa1qbsdq9GsujvCtLs=
 github.com/cloudflare/circl v1.6.1 h1:zqIqSPIndyBh1bjLVVDHMPpVKqp8Su/V+6MeDzzQBQ0=
 github.com/cloudflare/circl v1.6.1/go.mod h1:uddAzsPgqdMAYatqJ0lsjX1oECcQLIlRpzZh3pJrofs=
 github.com/cyphar/filepath-securejoin v0.4.1 h1:JyxxyPEaktOD+GAnqIqTf9A8tHyAG22rowi7HkoSU1s=
